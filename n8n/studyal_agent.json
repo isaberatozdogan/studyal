@@ -1,0 +1,129 @@
+{
+  "name": "StudyAL Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "74b4b5b6-edf0-4161-9ac6-c0b6497e4120",
+      "name": "When chat message received",
+      "webhookId": "f98ea764-ce71-4dd5-b5fc-b89545cfed85"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Sen StudyAL, İstanbul Okan Üniversitesi öğrencilerine yardımcı olan yapay zekâ destekli bir öğrenci asistanısın.\n\nGörevlerin:\n- Öğrencilerin üniversite hakkındaki sorularını yanıtlamak.\n- Üniversiteyle ilgili her bilgi sorusunda StudyAL API aracını kullanmak.\n- Öğrencinin sorusunu anlamını değiştirmeden API'ye göndermek.\n- API tarafından döndürülen bilgileri esas almak.\n- Akademik takvim, kayıt işlemleri, mali işlemler ve diğer üniversite belgelerinden yararlanmak.\n- Tarihleri, akademik birimleri ve dönemleri birbirine karıştırmamak.\n- Kaynak bilgilerini korumak.\n- Belgelerde bulunmayan bilgileri uydurmamak.\n- API bağlantısı başarısız olursa bunu kullanıcıya bildirmek.\n- Türkçe, anlaşılır ve düzenli cevaplar vermek.\nStudyAL API tarafından döndürülen cevap dışında hiçbir üniversite bilgisi verme. Genel bilgilerini kullanarak belge, tarih veya kayıt şartı üretme. API'nin döndürdüğü cevap alanını anlamını değiştirmeden kullanıcıya aktar. Yeterli bilgi bulunmuyorsa yalnızca bunu belirt.",
+          "maxIterations": 3,
+          "returnIntermediateSteps": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d0d56439-1793-4326-b076-653c04d45044",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen3.5:4b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "bc608736-aa84-4cc6-8ec0-ac05c6e16e49",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "wxjQvFgEmR2FeNeW",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "StudyAL üniversite bilgi sistemi",
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/soru",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "soru",
+              "value": "=StudyAL API tarafından döndürülen cevap dışında hiçbir üniversite bilgisi verme. Genel bilgilerini kullanarak belge, tarih veya kayıt şartı üretme. API'nin döndürdüğü cevap alanını anlamını değiştirmeden kullanıcıya aktar. Yeterli bilgi bulunmuyorsa yalnızca bunu belirt."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        368,
+        208
+      ],
+      "id": "b7b4bd68-e7de-4533-80d7-ce2f73e25f02",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1588ddf8-e4db-4641-b26f-4530675251cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b99600417aa3ad6fb3cb2b21acc07e4af6d64e2018c7a26089191d7f09060eb4"
+  },
+  "id": "JVpY9rXXaQEBMjzv",
+  "tags": []
+}
