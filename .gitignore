@@ -1,0 +1,39 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# React
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Veritabani
+/veritabani/
+/veritabani_yedek*/
+
+# Yedeklemeler
+app_eski.py
+*_eski.py
+*_yedek*
+backup/
+backups/
+yedekler/
+
+# Guvenlik
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+.n8n/
+
+# Sistem
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
